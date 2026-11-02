@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClassFlow — Clean Classroom Hub</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen antialiased selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+
+  <!-- ========================================================================= -->
+  <!-- 1. LEFT SIDEBAR (DESKTOP: md:flex) -->
+  <!-- ========================================================================= -->
+  <aside class="hidden md:flex fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-5 flex-col justify-between z-30 select-none">
+    
+    <!-- Top Branding & Navigation -->
+    <div class="space-y-6">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3 px-1">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 text-xl font-bold">
+          🎓
+        </div>
+        <div>
+          <h1 class="text-lg font-black tracking-tight text-slate-900 dark:text-white leading-none">ClassFlow</h1>
+          <p class="text-[11px] text-slate-400 mt-1">Classroom & Personal Hub</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links (5 Clean Tabs) -->
+      <nav class="space-y-1.5">
+        
+        <!-- Tab 1: Class Work & Tasks -->
+        <button data-tab="work-tasks" class="nav-tab active w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-base">📋</span>
+            <span>Class & My Tasks</span>
+          </div>
+          <span id="sidebar-badge-tasks" class="tab-counter px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0</span>
+        </button>
+
+        <!-- Tab 2: Today's Topics -->
+        <button data-tab="today-topics" class="nav-tab w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-base">📖</span>
+            <span>Today's Topics</span>
+          </div>
+          <span id="sidebar-badge-topics" class="tab-counter px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0</span>
+        </button>
+
+        <!-- Tab 3: Modules (Separate Tab) -->
+        <button data-tab="modules" class="nav-tab w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-base">📊</span>
+            <span>Modules</span>
+          </div>
+        </button>
+
+        <!-- Tab 4: Notes (Separate Tab) -->
+        <button data-tab="notes" class="nav-tab w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-base">📓</span>
+            <span>Notes & Files</span>
+          </div>
+        </button>
+
+        <!-- Tab 5: Reminders (Deadlines & Countdown) -->
+        <button data-tab="reminders" class="nav-tab w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-base">⏰</span>
+            <span>Reminders</span>
+          </div>
+          <span id="sidebar-badge-reminders" class="tab-counter px-2 py-0.5 rounded-full text-[10px] font-black bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0</span>
+        </button>
+
+      </nav>
+
+    </div>
+
+    <!-- Bottom Controls (Profile & Referral Card) -->
+    <div class="pt-3 border-t border-slate-100 dark:border-slate-800">
+      
+      <!-- Student Profile & Referral Card -->
+      <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 space-y-2.5">
+        
+        <!-- Profile & Theme Row -->
+        <div class="flex items-center justify-between gap-2">
+          <div onclick="App.openProfileModal()" class="flex items-center gap-2.5 min-w-0 cursor-pointer flex-1" title="Click to view/edit profile">
+            <div class="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold text-xs shrink-0">👤</div>
+            <div class="min-w-0 flex-1">
+              <p id="student-display-name" class="font-bold text-xs text-slate-900 dark:text-white truncate">Student</p>
+              <p id="sidebar-classroom-name" class="text-[11px] text-indigo-600 dark:text-indigo-400 font-bold truncate">General</p>
+            </div>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle-btn" onclick="App.toggleTheme()" title="Toggle Theme" class="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition text-xs">
+            <!-- Injected by JS -->
+          </button>
+        </div>
+
+        <!-- Referral Link & Switch Class Row -->
+        <div class="flex items-center gap-1.5 pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
+          <button onclick="App.openInviteModal()" class="flex-1 py-1.5 px-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+            <span>🔗</span>
+            <span>Referral Link</span>
+          </button>
+          <button onclick="App.switchClassroom()" title="Switch Class" class="py-1.5 px-2.5 rounded-xl bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-bold transition cursor-pointer">
+            🚪
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN CONTENT WRAPPER (Proper desktop padding-left md:pl-64) -->
+  <!-- ========================================================================= -->
+  <div class="md:pl-64 flex flex-col min-h-screen w-full">
+
+    <!-- MOBILE TOP MINIMAL HEADER (Phone size: block on mobile, hidden on md) -->
+    <header class="md:hidden sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-xl">🎓</span>
+        <div class="min-w-0">
+          <span class="font-black text-sm text-slate-900 dark:text-white block leading-none">ClassFlow</span>
+          <span id="mobile-classroom-name" class="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold truncate block">General</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="App.openInviteModal()" title="Referral Link" class="flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-xl bg-indigo-600 text-white shadow-sm cursor-pointer">
+          <span>🔗</span>
+          <span class="text-[10px]">Referral</span>
+        </button>
+        <button onclick="App.openProfileModal()" class="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 cursor-pointer">
+          👤
+        </button>
+        <button onclick="App.toggleTheme()" class="p-1.5 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 cursor-pointer">
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- 3. MAIN CONTENT CONTAINER -->
+    <main class="flex-1 min-h-screen p-4 sm:p-6 lg:p-8 pb-24 md:pb-12 max-w-5xl mx-auto w-full space-y-6">
+      
+      <!-- View 1: Work & Tasks (Unified) -->
+      <div id="view-work-tasks"></div>
+
+      <!-- View 2: Today's Topics -->
+      <div id="view-today-topics" class="hidden"></div>
+
+      <!-- View 3: Modules (Separate Tab) -->
+      <div id="view-modules" class="hidden"></div>
+
+      <!-- View 4: Notes & Files (Separate Tab) -->
+      <div id="view-notes" class="hidden"></div>
+
+      <!-- View 5: Reminders (Deadlines & Live Countdown) -->
+      <div id="view-reminders" class="hidden"></div>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 4. MOBILE BOTTOM NAVIGATION BAR (Phone size: fixed bottom, hidden on md) -->
+  <!-- ========================================================================= -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50 flex items-center justify-around px-1 shadow-lg">
+    
+    <!-- Tab 1: Work & Tasks -->
+    <button data-tab="work-tasks" class="nav-tab active flex flex-col items-center justify-center w-14 py-1 text-slate-500 transition">
+      <span class="text-base">📋</span>
+      <span class="text-[9px] font-bold mt-0.5">Tasks</span>
+    </button>
+
+    <!-- Tab 2: Today Topics -->
+    <button data-tab="today-topics" class="nav-tab flex flex-col items-center justify-center w-14 py-1 text-slate-500 transition">
+      <span class="text-base">📖</span>
+      <span class="text-[9px] font-bold mt-0.5">Today</span>
+    </button>
+
+    <!-- Tab 3: Modules -->
+    <button data-tab="modules" class="nav-tab flex flex-col items-center justify-center w-14 py-1 text-slate-500 transition">
+      <span class="text-base">📊</span>
+      <span class="text-[9px] font-bold mt-0.5">Modules</span>
+    </button>
+
+    <!-- Tab 4: Notes -->
+    <button data-tab="notes" class="nav-tab flex flex-col items-center justify-center w-14 py-1 text-slate-500 transition">
+      <span class="text-base">📓</span>
+      <span class="text-[9px] font-bold mt-0.5">Notes</span>
+    </button>
+
+    <!-- Tab 5: Reminders -->
+    <button data-tab="reminders" class="nav-tab flex flex-col items-center justify-center w-14 py-1 text-slate-500 transition">
+      <span class="text-base">⏰</span>
+      <span class="text-[9px] font-bold mt-0.5">Remind</span>
+    </button>
+
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- 5. MODALS (Opened only when clicking '+' buttons) -->
+  <!-- ========================================================================= -->
+
+  <!-- Modal A: Add Class Work -->
+  <div id="modal-add-classwork" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            📝 Post Class Work
+          </h3>
+          <p class="text-xs text-slate-400">Homework assignment with subject & due date.</p>
+        </div>
+        <button onclick="App.closeModal('modal-add-classwork')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="WorkAndTasks.handleAddGlobal(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Subject *</label>
+          <input type="text" id="gw-subject-modal" required placeholder="e.g. Mathematics, Operating Systems" list="subject-suggestions" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Topic / Homework Assignment *</label>
+          <input type="text" id="gw-topic-modal" required placeholder="e.g. Solve Chapter 3 Exercises 1 to 15" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Due Date *</label>
+          <input type="date" id="gw-date-modal" required class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-add-classwork')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition">Save Class Work</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal B: Add My Task -->
+  <div id="modal-add-mytask" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            ✅ Add My Task
+          </h3>
+          <p class="text-xs text-slate-400">Personal task for your study checklist.</p>
+        </div>
+        <button onclick="App.closeModal('modal-add-mytask')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="WorkAndTasks.handleAddMyTask(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Subject (Optional)</label>
+          <input type="text" id="mt-subject-modal" placeholder="e.g. Computer Science" list="subject-suggestions" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Task / Topic *</label>
+          <input type="text" id="mt-topic-modal" required placeholder="e.g. Revise Binary Search code & solve 2 problems" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Target Date</label>
+            <input type="date" id="mt-date-modal" required class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Priority</label>
+            <select id="mt-priority-modal" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="High">🔴 High</option>
+              <option value="Medium" selected>🟡 Medium</option>
+              <option value="Low">🟢 Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-add-mytask')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition">Add to My Tasks</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal C: Log Today's Lecture Topic -->
+  <div id="modal-add-todaytopic" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            📖 Today's Topic
+          </h3>
+          <p class="text-xs text-slate-400">Subject, topic covered, and reference.</p>
+        </div>
+        <button onclick="App.closeModal('modal-add-todaytopic')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="TodayTopics.handleAdd(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Subject *</label>
+          <input type="text" id="tt-subject-modal" required placeholder="e.g. Mathematics" list="subject-suggestions" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Topic Covered *</label>
+          <input type="text" id="tt-topic-modal" required placeholder="e.g. Reverse Linked List, Two Pointers" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Reference (LeetCode # / Module name / Revision)</label>
+          <input type="text" id="tt-ref-modal" placeholder="e.g. LeetCode #206, Module 2, or Revision" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Date</label>
+          <input type="date" id="tt-date-modal" required class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none">
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-add-todaytopic')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-purple-600 text-white hover:bg-purple-700 transition">Save Lecture</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal D: Add Module with Real File/Photo Upload -->
+  <div id="modal-add-module" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            📊 Add Module / Syllabus Unit
+          </h3>
+          <p class="text-xs text-slate-400">Track units, chapters, and attach real files or photos.</p>
+        </div>
+        <button onclick="App.closeModal('modal-add-module')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="ModulesView.handleAddModuleModal(event)" class="space-y-3.5">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Subject</label>
+            <input type="text" id="mod-subject-input-modal" readonly class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 font-bold">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Folder</label>
+            <select id="mod-folder-input-modal" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none"></select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Module / Unit Title *</label>
+          <input type="text" id="mod-title-modal" required placeholder="e.g. Unit 3: Graph Traversal (BFS & DFS)" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Status</label>
+          <select id="mod-status-modal" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none">
+            <option value="todo">⭕ Not Started</option>
+            <option value="in_progress">⏳ In Progress</option>
+            <option value="completed">✅ Completed</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Attach Files / Photos <span class="font-normal text-slate-400">(multiple allowed)</span></label>
+          <label class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-blue-400 hover:bg-blue-50/30 dark:hover:bg-blue-950/20 cursor-pointer transition">
+            <span class="text-lg">📂</span>
+            <span>Click to choose PDFs, images, docs…</span>
+            <input type="file" id="mod-file-modal" onchange="ModulesView.handleFileSelect(this)" class="hidden" multiple>
+          </label>
+          <div id="mod-pending-files-list" class="mt-2 space-y-1.5"></div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-add-module')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition">Save Module</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal E: Add Note / Upload Photo / File -->
+  <div id="modal-add-note" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            📓 Write Note / Upload File
+          </h3>
+          <p class="text-xs text-slate-400">Save revision points, photos, or documents.</p>
+        </div>
+        <button onclick="App.closeModal('modal-add-note')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="NotesView.handleAddNoteModal(event)" class="space-y-3.5">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Subject</label>
+            <input type="text" id="note-subject-input-modal" readonly class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 font-bold">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Folder</label>
+            <select id="note-folder-modal" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none"></select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Topic / Title *</label>
+          <input type="text" id="note-title-modal" required placeholder="e.g. Formula Sheet, LeetCode Approach, Viva Questions" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Note Content</label>
+          <textarea id="note-content-modal" rows="4" placeholder="Write any notes, steps, formulas or explanations..." class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Attach Files / Photos <span class="font-normal text-slate-400">(multiple allowed)</span></label>
+          <label class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-amber-400 hover:bg-amber-50/30 dark:hover:bg-amber-950/20 cursor-pointer transition">
+            <span class="text-lg">📂</span>
+            <span>Click to choose PDFs, images, docs…</span>
+            <input type="file" id="note-file-modal" onchange="NotesView.handleFileSelect(this)" class="hidden" multiple>
+          </label>
+          <div id="note-pending-files-list" class="mt-2 space-y-1.5"></div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-add-note')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-amber-600 text-white hover:bg-amber-700 transition">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal F: Add Reminder -->
+  <div id="modal-add-reminder" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            ⏰ Schedule Reminder Alert
+          </h3>
+          <p class="text-xs text-slate-400">Live countdown ticker & expiring notification.</p>
+        </div>
+        <button onclick="App.closeModal('modal-add-reminder')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="RemindersView.handleAdd(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Topic / Event Name *</label>
+          <input type="text" id="rem-topic-modal" required placeholder="e.g. Maths Mid-Term Exam, DBMS Submission" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Deadline Date *</label>
+            <input type="date" id="rem-date-modal" required class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Deadline Time</label>
+            <input type="time" id="rem-time-modal" value="23:59" class="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none">
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-add-reminder')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-rose-600 text-white hover:bg-rose-700 transition">Schedule Alert</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal G: Student Profile Modal -->
+  <div id="modal-student-profile" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-sm w-full p-6">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Student Profile</h3>
+          <p class="text-xs text-slate-400">Classroom details & personal settings.</p>
+        </div>
+        <button onclick="App.closeProfileModal()" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <form onsubmit="App.saveProfile(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Your Name</label>
+          <input type="text" id="profile-name-input" required placeholder="e.g. Rahul, Aman, Priya" class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+
+        <!-- Current Class & Referral in Profile -->
+        <div class="p-3 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/50 dark:border-indigo-900/50 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-500 dark:text-slate-400 font-semibold">Active Class:</span>
+            <span id="profile-modal-class-name" class="font-bold text-indigo-600 dark:text-indigo-400">General</span>
+          </div>
+          <button type="button" onclick="App.closeProfileModal(); App.openInviteModal();" class="w-full py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm">
+            <span>🔗 Share Referral Link</span>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeProfileModal()" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Cancel</button>
+          <button type="submit" class="px-5 py-2 text-xs font-bold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition">Save Name</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal H: Classroom Security Gate (Onboarding / Login) -->
+  <div id="modal-classroom-gate" class="modal-overlay fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6 sm:p-7">
+      <div class="text-center mb-5">
+        <div class="w-14 h-14 rounded-3xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white text-2xl flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/25 mb-3">
+          🎓
+        </div>
+        <h3 class="text-lg font-black text-slate-900 dark:text-white">ClassFlow Classroom Security</h3>
+        <p class="text-xs text-slate-400 mt-1">Apna Name, Class Name aur Password daal kar classroom me enter karein.</p>
+      </div>
+
+      <!-- Referral Invitation Banner (Shown if entering via referral link) -->
+      <div id="gate-referral-banner" class="hidden mb-4 p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-xs flex items-center gap-2.5">
+        <span class="text-base">🎉</span>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold">You've been invited to join:</p>
+          <p id="gate-referral-class-name" class="font-black text-indigo-600 dark:text-indigo-400 truncate"></p>
+        </div>
+      </div>
+
+      <form onsubmit="App.handleClassroomGateSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Your Name *</label>
+          <input type="text" id="gate-student-name" required placeholder="e.g. Rahul Sharma" class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">Class Name *</label>
+            <span id="gate-class-lock-badge" class="hidden text-[10px] text-indigo-500 font-bold">🔒 Auto-filled via Link</span>
+          </div>
+          <input type="text" id="gate-class-name" required placeholder="e.g. CS-3A, BCA-2nd-Year, 12th-Science" class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold">
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">Class Password *</label>
+            <span id="gate-pass-lock-badge" class="hidden text-[10px] text-indigo-500 font-bold">🔒 Auto-filled via Link</span>
+          </div>
+          <input type="password" id="gate-class-password" required placeholder="Set or enter class password" class="w-full px-3.5 py-2.5 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono">
+          <p id="gate-password-hint" class="text-[10px] text-slate-400 mt-1">Agar class pehle se bani hai toh uska password daalein, naye class ke liye ye password set ho jayega.</p>
+        </div>
+
+        <!-- Error Message box -->
+        <div id="gate-error-message" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-semibold"></div>
+
+        <button type="submit" id="gate-submit-btn" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 cursor-pointer">
+          <span>🚀 Enter Classroom</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal I: Classroom Referral / Invite Link -->
+  <div id="modal-class-invite" class="modal-overlay fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="modal-content bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            🔗 Invite Classmates (Referral Link)
+          </h3>
+          <p class="text-xs text-slate-400">Apne classroom ka direct referral link share karein.</p>
+        </div>
+        <button onclick="App.closeModal('modal-class-invite')" class="p-1 text-slate-400 hover:text-slate-600">&times;</button>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Class details summary -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">Class Name:</span>
+            <span id="invite-modal-class-name" class="font-extrabold text-slate-900 dark:text-white"></span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">Class Password:</span>
+            <span id="invite-modal-class-pass" class="font-mono font-bold text-indigo-600 dark:text-indigo-400"></span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Direct Referral Link</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="invite-modal-url" readonly class="w-full px-3 py-2 text-xs rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-mono select-all">
+            <button onclick="App.copyInviteLink()" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shrink-0 flex items-center gap-1.5 cursor-pointer">
+              <span>📋</span>
+              <span>Copy</span>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
+            ✨ <b>Direct Join Feature</b>: Jab aapka classmate ye link kholega, Class Name aur Password automatically fill ho jayenge — unhe sirf apna <b>Name</b> dalna hoga!
+          </p>
+        </div>
+
+        <div class="flex justify-end pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="App.closeModal('modal-class-invite')" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-600 dark:text-slate-400">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Datalist for Subject Auto-suggestions -->
+  <datalist id="subject-suggestions"></datalist>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Client Application Scripts -->
+  <script src="/js/utils.js"></script>
+  <script src="/js/db.js"></script>
+  <script src="/js/storage.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/components/workAndTasks.js"></script>
+  <script src="/js/components/todayTopics.js"></script>
+  <script src="/js/components/modulesView.js"></script>
+  <script src="/js/components/notesView.js"></script>
+  <script src="/js/components/remindersView.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

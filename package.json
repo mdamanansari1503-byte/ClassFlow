@@ -1,0 +1,13 @@
+{
+  "name": "classflow",
+  "version": "1.0.0",
+  "description": "ClassFlow - Unified Classroom Hub with Global Classwork, Today Topics & Local Student Workspace",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["student", "classroom", "homework", "notes", "todo", "education"],
+  "author": "Antigravity",
+  "license": "MIT"
+}

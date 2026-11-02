@@ -1,0 +1,232 @@
+/* ClassFlow Custom Theme & Animation Styles */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  font-family: var(--font-main);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.7);
+}
+
+/* Pulse badge for live sync */
+@keyframes syncPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.sync-dot {
+  animation: syncPulse 2s infinite;
+}
+
+/* Active navigation tab highlight */
+.nav-tab {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-tab.active {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px -2px rgba(79, 70, 229, 0.35);
+}
+
+.nav-tab.active span, 
+.nav-tab.active svg {
+  color: #ffffff !important;
+}
+
+.nav-tab.active .tab-counter {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* Mobile bottom nav active styling */
+nav.md\:hidden .nav-tab.active {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: #6366f1 !important;
+  box-shadow: none !important;
+  border-radius: 1rem;
+}
+nav.md\:hidden .nav-tab.active span {
+  color: #6366f1 !important;
+  font-weight: 800;
+}
+
+/* Mobile Drawer */
+#mobile-drawer {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dropdown menu animation */
+.dropdown-menu {
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  transform-origin: top right;
+}
+.dropdown-menu.hidden {
+  display: none;
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Card hover animation */
+.interactive-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+.interactive-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Priority Badges */
+.badge-urgent {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+.dark .badge-urgent {
+  background-color: rgba(185, 28, 28, 0.2);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.3);
+}
+
+.badge-high {
+  background-color: #ffedd5;
+  color: #c2410c;
+  border: 1px solid #fdba74;
+}
+.dark .badge-high {
+  background-color: rgba(194, 65, 12, 0.2);
+  color: #fb923c;
+  border-color: rgba(251, 146, 60, 0.3);
+}
+
+.badge-medium {
+  background-color: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+}
+.dark .badge-medium {
+  background-color: rgba(180, 83, 9, 0.2);
+  color: #facc15;
+  border-color: rgba(250, 204, 21, 0.3);
+}
+
+.badge-normal {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #7dd3fc;
+}
+.dark .badge-normal {
+  background-color: rgba(3, 105, 161, 0.2);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+/* Global Tag vs Local Tag distinction */
+.badge-global {
+  background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-local {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Modals */
+.modal-overlay {
+  transition: opacity 0.2s ease-out;
+}
+.modal-content {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease-out;
+}
+.modal-overlay.hidden {
+  display: none;
+}
+
+/* Code block styling in covered topics */
+pre.formula-block {
+  font-family: var(--font-mono);
+  background: #0f172a;
+  color: #38bdf8;
+  border-radius: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Toast Container */
+#toast-container {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.25rem;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+@media (min-width: 768px) {
+  #toast-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+.toast {
+  pointer-events: auto;
+  animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes toastIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
